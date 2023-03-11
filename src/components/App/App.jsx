@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import './App.css';
+
 import TaskList from '../TaskList';
 import Footer from '../Footer';
 import NewTaskForm from '../NewTaskForm';
