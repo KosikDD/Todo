@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import propTypes from 'prop-types';
 import { formatDistanceToNow } from 'date-fns';
 
+import './Task.css';
+
 export default class Task extends Component {
   constructor(props) {
     super(props);

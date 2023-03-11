@@ -1,6 +1,7 @@
 import React from 'react';
 import propTypes from 'prop-types';
 
+import './TaskList.css';
 import Task from '../Task';
 
 const TaskList = ({ todos, onDeleted, onToggleDone }) => {
