@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import React, { Component } from 'react';
 
 import TaskList from '../TaskList';
@@ -9,12 +8,8 @@ export default class App extends Component {
   maxId = 100;
 
   state = {
-    todoData: [
-      this.createTask('Drink Coffee'),
-      this.createTask('Build Awesome App'),
-      this.createTask('Go to GYM'),
-    ],
-    filter: 'all', //all, active, completed
+    todoData: [this.createTask('Drink Coffee'), this.createTask('Build Awesome App'), this.createTask('Go to GYM')],
+    filter: 'all', // all, active, completed
   };
 
   createTask(label) {
@@ -54,17 +49,13 @@ export default class App extends Component {
     this.setState(({ todoData }) => {
       const idx = todoData.findIndex((el) => el.id === id);
 
-      //1. update data
+      // 1. update data
       const oldTask = todoData[idx];
       const newTask = { ...oldTask, completed: !oldTask.completed };
 
-      //2. construct new array
+      // 2. construct new array
       return {
-        todoData: [
-          ...todoData.slice(0, idx),
-          newTask,
-          ...todoData.slice(idx + 1),
-        ],
+        todoData: [...todoData.slice(0, idx), newTask, ...todoData.slice(idx + 1)],
       };
     });
   };
@@ -103,17 +94,8 @@ export default class App extends Component {
       <section className="todoapp">
         <NewTaskForm addTask={this.addTask} />
         <section className="main">
-          <TaskList
-            todos={visibleTask}
-            onDeleted={this.deleteTask}
-            onToggleDone={this.onToggleDone}
-          />
-          <Footer
-            leftCount={leftCount}
-            filter={filter}
-            onFilter={this.onFilter}
-            onClear={this.onClear}
-          />
+          <TaskList todos={visibleTask} onDeleted={this.deleteTask} onToggleDone={this.onToggleDone} />
+          <Footer leftCount={leftCount} filter={filter} onFilter={this.onFilter} onClear={this.onClear} />
         </section>
       </section>
     );

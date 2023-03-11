@@ -1,8 +1,7 @@
-/* eslint-disable prettier/prettier */
-import React from "react";
-import propTypes from "prop-types";
+import React from 'react';
+import propTypes from 'prop-types';
 
-import Task from "../Task";
+import Task from '../Task';
 
 const TaskList = ({ todos, onDeleted, onToggleDone }) => {
   const elements = todos.map((item) => {

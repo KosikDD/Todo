@@ -1,19 +1,18 @@
-/* eslint-disable prettier/prettier */
-import React from "react";
-import propTypes from "prop-types";
+import React from 'react';
+import propTypes from 'prop-types';
 
 export default class TaskFilter extends React.Component {
   buttons = [
-    { name: "all", label: "All" },
-    { name: "active", label: "Active" },
-    { name: "completed", label: "Completed" },
+    { name: 'all', label: 'All' },
+    { name: 'active', label: 'Active' },
+    { name: 'completed', label: 'Completed' },
   ];
 
   render() {
     const buttons = this.buttons.map(({ name, label }) => {
       const { filter, onFilter } = this.props;
       const isActive = filter === name;
-      const clazz = isActive ? "selected" : "";
+      const clazz = isActive ? 'selected' : '';
       return (
         <li key={name}>
           <button
@@ -33,7 +32,7 @@ export default class TaskFilter extends React.Component {
 }
 
 TaskFilter.defaultProps = {
-  filter: "all",
+  filter: 'all',
   onFilter: () => {},
 };
 

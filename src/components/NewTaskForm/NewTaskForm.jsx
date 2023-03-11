@@ -1,11 +1,10 @@
-/* eslint-disable prettier/prettier */
-import React, { Component } from "react";
-import propTypes from "prop-types";
+import React, { Component } from 'react';
+import propTypes from 'prop-types';
 
 export default class NewTaskForm extends Component {
   constructor(props) {
     super(props);
-    this.state = { value: "" };
+    this.state = { value: '' };
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -18,7 +17,7 @@ export default class NewTaskForm extends Component {
   handleSubmit = (event) => {
     this.props.addTask(this.state.value);
     event.preventDefault();
-    this.setState({ value: "" });
+    this.setState({ value: '' });
   };
 
   render() {

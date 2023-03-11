@@ -1,8 +1,7 @@
-/* eslint-disable prettier/prettier */
-import React from "react";
-import propTypes from "prop-types";
+import React from 'react';
+import propTypes from 'prop-types';
 
-import TasksFilter from "../TasksFilter/TasksFilter";
+import TasksFilter from '../TasksFilter/TasksFilter';
 
 const Footer = (props) => {
   const { leftCount, filter, onFilter, onClear } = props;
@@ -20,7 +19,7 @@ const Footer = (props) => {
 
 Footer.defaultProps = {
   leftCount: 0,
-  filter: "all",
+  filter: 'all',
   onFilter: () => {},
   onClear: () => {},
 };

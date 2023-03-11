@@ -1,7 +1,6 @@
-/* eslint-disable prettier/prettier */
-import React, { Component } from "react";
-import propTypes from "prop-types";
-import { formatDistanceToNow } from "date-fns";
+import React, { Component } from 'react';
+import propTypes from 'prop-types';
+import { formatDistanceToNow } from 'date-fns';
 
 export default class Task extends Component {
   constructor(props) {
@@ -10,10 +9,7 @@ export default class Task extends Component {
   }
 
   componentDidMount() {
-    this.interval = setInterval(
-      () => this.setState({ timeNow: Date.now() }),
-      1000
-    );
+    this.interval = setInterval(() => this.setState({ timeNow: Date.now() }), 1000);
   }
 
   componentWillUnmount() {
@@ -26,23 +22,18 @@ export default class Task extends Component {
       includeSeconds: true,
       addSuffix: true,
     });
-    let classNames = "";
+    let classNames = '';
 
     if (completed) {
-      classNames += "completed";
+      classNames += 'completed';
     } else {
-      classNames = "";
+      classNames = '';
     }
 
     return (
       <li className={classNames}>
         <div className="view">
-          <input
-            className="toggle"
-            type="checkbox"
-            checked={completed}
-            onChange={onToggleDone}
-          ></input>
+          <input className="toggle" type="checkbox" checked={completed} onChange={onToggleDone}></input>
           <label>
             <span className="description" onClick={onToggleDone}>
               {label}
@@ -58,7 +49,7 @@ export default class Task extends Component {
 }
 
 Task.defaultProps = {
-  label: "",
+  label: '',
   onToggleDone: () => {},
   onDeleted: () => {},
   completed: false,
