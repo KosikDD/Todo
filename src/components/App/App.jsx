@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 
 import './App.css';
-
 import TaskList from '../TaskList';
 import Footer from '../Footer';
 import NewTaskForm from '../NewTaskForm';
@@ -10,7 +9,7 @@ export default class App extends Component {
   maxId = 100;
 
   state = {
-    todoData: [this.createTask('Drink Coffee'), this.createTask('Build Awesome App'), this.createTask('Go to GYM')],
+    todoData: [{ ...this.createTask('Build Awesome App'), completed: true }, this.createTask('Submit for review')],
     filter: 'all', // all, active, completed
   };
 
