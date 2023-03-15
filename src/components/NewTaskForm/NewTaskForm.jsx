@@ -32,7 +32,7 @@ export default class NewTaskForm extends Component {
             className="new-todo"
             placeholder="What needs to be done?"
             onChange={this.handleChange}
-            required="true"
+            required={true}
             pattern="^[^\s]+(\s.*)?$"
           ></input>
         </form>
