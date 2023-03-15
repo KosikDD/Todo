@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import propTypes from 'prop-types';
 import { formatDistanceToNow } from 'date-fns';
+import classNames from 'classnames';
 
 import './Task.css';
 
@@ -24,16 +25,9 @@ export default class Task extends Component {
       includeSeconds: true,
       addSuffix: true,
     });
-    let classNames = '';
-
-    if (completed) {
-      classNames += 'completed';
-    } else {
-      classNames = '';
-    }
 
     return (
-      <li className={classNames}>
+      <li className={classNames({ completed: completed })}>
         <div className="view">
           <input className="toggle" type="checkbox" checked={completed} onChange={onToggleDone}></input>
           <label>

@@ -25,14 +25,7 @@ export default class App extends Component {
 
   addTask = (label) => {
     this.setState(({ todoData }) => {
-      const newTask = {
-        label,
-        completed: false,
-        editing: false,
-        time: new Date(),
-        id: this.maxId++,
-      };
-      return { todoData: [newTask, ...todoData] };
+      return { todoData: [this.createTask(label), ...todoData] };
     });
   };
 

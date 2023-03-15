@@ -5,24 +5,26 @@ import './TaskList.css';
 import Task from '../Task';
 
 const TaskList = ({ todos, onDeleted, onToggleDone }) => {
-  const elements = todos.map((item) => {
-    const { id } = item;
+  return (
+    <ul className="todo-list">
+      {todos.map((item) => {
+        const { id } = item;
 
-    return (
-      <Task
-        {...item}
-        key={id}
-        onDeleted={() => {
-          onDeleted(id);
-        }}
-        onToggleDone={() => {
-          onToggleDone(id);
-        }}
-      />
-    );
-  });
-
-  return <ul className="todo-list">{elements}</ul>;
+        return (
+          <Task
+            {...item}
+            key={id}
+            onDeleted={() => {
+              onDeleted(id);
+            }}
+            onToggleDone={() => {
+              onToggleDone(id);
+            }}
+          />
+        );
+      })}
+    </ul>
+  );
 };
 
 TaskList.defaultProps = {
