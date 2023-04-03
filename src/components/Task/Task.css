@@ -81,7 +81,6 @@
   height: 40px;
   font-size: 34px;
   color: #cc9a9a;
-  margin: auto 0 11px;
   transition: color 0.2s ease-out;
   cursor: pointer;
 }
@@ -92,6 +91,7 @@
 
 .todo-list li .icon-destroy {
   right: 10px;
+  margin: auto 0;
 }
 
 .todo-list li .icon-destroy:after {
@@ -101,6 +101,7 @@
 .todo-list li .icon-edit {
   font-size: 19px;
   right: 45px;
+  margin: auto 0;
 }
 
 .todo-list li .icon-edit:after {
@@ -109,7 +110,6 @@
 
 .todo-list li .edit {
   display: none;
-  
 }
 
 .todo-list li.editing:last-child {
@@ -118,4 +118,52 @@
 
 .todo-list li.completed .icon-edit {
   display: none;
+}
+
+.todo-list li .icon-pause,
+.todo-list li .icon-play {
+  font-size: 13px;
+  width: 18px;
+  height: 18px;
+  position: relative;
+}
+.todo-list li .icon-play {
+  bottom: -7px;
+  font-size: 16px;
+}
+
+.icon-pause::after {
+  content: '⏸';
+}
+
+.icon-play::after {
+  content: '▶';
+}
+
+.timer {
+  display: block;
+  position: relative;
+  margin: auto 0;
+  font-size: 13px;
+  color: gray;
+  padding-left: 30px;
+}
+
+.todo-list li .hidden {
+  display: none;
+}
+
+.label {
+  display: flex;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  /* display: none; <- Crashes Chrome on hover */
+  appearance: none;
+  margin: 0;
+}
+
+input[type='number'] {
+  appearance: textfield; /* Firefox */
 }

@@ -9,13 +9,16 @@ export default class App extends Component {
   maxId = 100;
 
   state = {
-    todoData: [{ ...this.createTask('Build Awesome App'), completed: true }, this.createTask('Submit for review')],
+    todoData: [{ ...this.createTask('Submit for review'), completed: true }],
     filter: 'all', // all, active, completed
+    deletedItems: false,
   };
 
-  createTask(label) {
+  createTask(label, min = 0, sec = 0) {
     return {
       label,
+      min: min,
+      sec: sec,
       completed: false,
       editing: false,
       time: new Date(),
@@ -23,10 +26,24 @@ export default class App extends Component {
     };
   }
 
-  addTask = (label) => {
+  addTask = (label, min, sec) => {
     this.setState(({ todoData }) => {
-      return { todoData: [this.createTask(label), ...todoData] };
+      return { todoData: [this.createTask(label, min, sec), ...todoData] };
     });
+  };
+
+  updateTask = (id, min, sec) => {
+    if (this.state.deletedItems) {
+      this.setState(({ todoData }) => {
+        const idx = todoData.findIndex((el) => el.id === id);
+        const updatedTask = { ...todoData[idx], min: min, sec: sec };
+        return {
+          todoData: [...todoData.slice(0, idx), updatedTask, ...todoData.slice(idx + 1)],
+        };
+      });
+    } else {
+      this.setState({ deletedItems: true });
+    }
   };
 
   deleteTask = (id) => {
@@ -35,6 +52,7 @@ export default class App extends Component {
 
       return {
         todoData: [...todoData.slice(0, idx), ...todoData.slice(idx + 1)],
+        deletedItems: false,
       };
     });
   };
@@ -62,6 +80,7 @@ export default class App extends Component {
     this.setState(({ todoData }) => {
       return {
         todoData: todoData.filter((el) => !el.completed),
+        deletedItems: false,
       };
     });
   };
@@ -88,7 +107,12 @@ export default class App extends Component {
       <section className="todoapp">
         <NewTaskForm addTask={this.addTask} />
         <section className="main">
-          <TaskList todos={visibleTask} onDeleted={this.deleteTask} onToggleDone={this.onToggleDone} />
+          <TaskList
+            todos={visibleTask}
+            onDeleted={this.deleteTask}
+            onToggleDone={this.onToggleDone}
+            onUpdate={this.updateTask}
+          />
           <Footer leftCount={leftCount} filter={filter} onFilter={this.onFilter} onClear={this.onClear} />
         </section>
       </section>

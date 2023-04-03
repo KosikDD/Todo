@@ -4,7 +4,7 @@ import propTypes from 'prop-types';
 import './TaskList.css';
 import Task from '../Task';
 
-const TaskList = ({ todos, onDeleted, onToggleDone }) => {
+const TaskList = ({ todos, onDeleted, onToggleDone, onUpdate }) => {
   return (
     <ul className="todo-list">
       {todos.map((item) => {
@@ -19,6 +19,9 @@ const TaskList = ({ todos, onDeleted, onToggleDone }) => {
             }}
             onToggleDone={() => {
               onToggleDone(id);
+            }}
+            onUpdate={(min, sec) => {
+              onUpdate(id, min, sec);
             }}
           />
         );
