@@ -15,6 +15,7 @@ export default class Task extends Component {
         sec: `0${props.sec}`,
         convert: false,
         pause: false,
+        resume: false,
         closetozero: false,
       };
     } else {
@@ -24,6 +25,7 @@ export default class Task extends Component {
         sec: props.sec,
         convert: false,
         pause: false,
+        resume: false,
         closetozero: false,
       };
     }
@@ -44,6 +46,7 @@ export default class Task extends Component {
   componentDidUpdate() {
     if (this.state.pause) {
       clearInterval(this.interval);
+      this.interval = setInterval(() => this.setState({ timeNow: Date.now() }), 1000);
     } else {
       if (this.state.convert) {
         clearInterval(this.interval);
@@ -65,7 +68,7 @@ export default class Task extends Component {
           1000
         );
       } else if ((Number(this.state.min) === 0) & (Number(this.state.sec) === 0)) {
-        clearInterval(this.interval);
+        this.setState({ pause: true });
       }
     }
   }
@@ -87,7 +90,10 @@ export default class Task extends Component {
     };
 
     const startTimer = () => {
-      this.setState({ pause: false });
+      if (this.state.pause) {
+        this.setState({ pause: false });
+        this.interval = setInterval(() => this.setState({ timeNow: Date.now(), sec: this.state.sec - 1 }), 1000);
+      }
     };
 
     const onCheck = () => {
