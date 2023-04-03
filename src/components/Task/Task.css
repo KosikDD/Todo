@@ -109,6 +109,7 @@
 
 .todo-list li .edit {
   display: none;
+  
 }
 
 .todo-list li.editing:last-child {
