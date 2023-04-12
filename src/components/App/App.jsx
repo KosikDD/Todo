@@ -15,7 +15,6 @@ const maxId = counter();
 const App = () => {
   const [todoData, setTodoData] = useState([]);
   const [filter, setOnFilter] = useState('all');
-  const [deletedItems, setDeletedItems] = useState(false);
 
   const createTask = (label, min = 0, sec = 0) => {
     return {
@@ -36,21 +35,23 @@ const App = () => {
   };
 
   const updateTask = (id, min, sec) => {
-    if (deletedItems) {
-      setTodoData((todoData) => {
-        const idx = todoData.findIndex((el) => el.id === id);
-        const updatedTask = { ...todoData[idx], min: min, sec: sec };
-        return [...todoData.slice(0, idx), updatedTask, ...todoData.slice(idx + 1)];
+    setTodoData((todoData) => {
+      const index = todoData.findIndex((el) => {
+        return el.id === id;
       });
-    } else {
-      setDeletedItems(true);
-    }
+
+      const oldItem = todoData[index];
+      if (typeof oldItem === 'undefined') return todoData;
+      const newItem = { ...oldItem, min: min, sec: sec };
+      const newArray = [...todoData.slice(0, index), newItem, ...todoData.slice(index + 1)];
+
+      return newArray;
+    });
   };
 
   const deleteTask = (id) => {
     setTodoData((todoData) => {
       const idx = todoData.findIndex((el) => el.id === id);
-      setDeletedItems(false);
       return [...todoData.slice(0, idx), ...todoData.slice(idx + 1)];
     });
   };
@@ -70,7 +71,6 @@ const App = () => {
 
   const onClear = () => {
     setTodoData((todoData) => {
-      setDeletedItems(false);
       return todoData.filter((el) => !el.completed);
     });
   };

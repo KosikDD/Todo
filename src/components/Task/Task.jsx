@@ -6,14 +6,18 @@ import classNames from 'classnames';
 import './Task.css';
 
 const Task = (props) => {
-  const { label, onToggleDone, onDeleted, completed, time, min, sec } = props;
+  const { label, onToggleDone, onDeleted, onUpdate, completed, time, min, sec } = props;
   const [pause, setPause] = useState(false);
   const [timer, setTimer] = useState(min * 60 + Number(sec));
+  const [dataText, setDataText] = useState(' less than 5 seconds ago');
 
-  const timerCreated = formatDistanceToNow(time, {
-    includeSeconds: true,
-    addSuffix: true,
-  });
+  const timerCreated = () =>
+    setDataText(
+      formatDistanceToNow(time, {
+        includeSeconds: true,
+        addSuffix: true,
+      })
+    );
 
   const timerRun = () => {
     if (!pause)
@@ -24,11 +28,13 @@ const Task = (props) => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      timerCreated;
+      timerCreated();
       timerRun();
     }, 1000);
     return () => {
       clearInterval(interval);
+      console.log(Math.floor(timer / 60), Math.floor(timer % 60));
+      onUpdate(Math.floor(timer / 60), Math.floor(timer % 60));
     };
   }, [pause, timer]);
 
@@ -86,7 +92,7 @@ const Task = (props) => {
             <button className="icon icon-pause" onClick={pauseTimer}></button>
             {timerSet()}
           </span>
-          <span className="created">created {timerCreated}</span>
+          <span className="created">created {dataText}</span>
         </label>
         <button className="icon icon-edit"></button>
         <button className="icon icon-destroy" onClick={onDeleted}></button>
