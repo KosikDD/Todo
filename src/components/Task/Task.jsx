@@ -1,147 +1,101 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import propTypes from 'prop-types';
 import { formatDistanceToNow } from 'date-fns';
 import classNames from 'classnames';
 
 import './Task.css';
 
-export default class Task extends Component {
-  constructor(props) {
-    super(props);
-    if (props.sec === 0) {
-      this.state = {
-        timeNow: Date.now(),
-        min: props.min,
-        sec: `0${props.sec}`,
-        convert: false,
-        pause: false,
-        resume: false,
-        closetozero: false,
-      };
+const Task = (props) => {
+  const { label, onToggleDone, onDeleted, completed, time, min, sec } = props;
+  const [pause, setPause] = useState(false);
+  const [timer, setTimer] = useState(min * 60 + Number(sec));
+
+  const timerCreated = formatDistanceToNow(time, {
+    includeSeconds: true,
+    addSuffix: true,
+  });
+
+  const timerRun = () => {
+    if (!pause)
+      setTimer((timer) => {
+        return timer - 1;
+      });
+  };
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      timerCreated;
+      timerRun();
+    }, 1000);
+    return () => {
+      clearInterval(interval);
+    };
+  }, [pause, timer]);
+
+  const timerSet = () => {
+    if (timer < 0) return '00:00';
+    return `${Math.floor(timer / 60)
+      .toString()
+      .padStart(2, '0')}:${Math.floor(timer % 60)
+      .toString()
+      .padStart(2, '0')}`;
+  };
+
+  const pauseTimer = () => {
+    setPause(true);
+  };
+
+  const startTimer = () => {
+    setPause(false);
+  };
+
+  const onCheck = () => {
+    if (!completed) {
+      pauseTimer();
+      onToggleDone();
     } else {
-      this.state = {
-        timeNow: Date.now(),
-        min: props.min,
-        sec: props.sec,
-        convert: false,
-        pause: false,
-        resume: false,
-        closetozero: false,
-      };
+      startTimer();
+      onToggleDone();
     }
-  }
+  };
 
-  componentDidMount() {
-    if ((Number(this.state.min) === 0) & (Number(this.state.sec) === 0)) {
-      this.interval = setInterval(() => this.setState({ timeNow: Date.now(), pause: true }), 1000);
-    } else if ((this.state.min > 0) & (Number(this.state.sec) === 0)) {
-      this.interval = setInterval(() => this.setState({ timeNow: Date.now(), convert: true }), 1000);
-    } else if ((this.state.sec <= 10) & (this.state.sec > 0)) {
-      this.interval = setInterval(() => this.setState({ timeNow: Date.now(), sec: `0${this.state.sec - 1}` }), 1000);
+  const onDone = (event) => {
+    if (!completed) {
+      pauseTimer();
+      onToggleDone();
+      event.preventDefault();
     } else {
-      this.interval = setInterval(() => this.setState({ timeNow: Date.now(), sec: this.state.sec - 1 }), 1000);
+      startTimer();
+      event.preventDefault();
+      onToggleDone();
     }
-  }
+  };
 
-  componentDidUpdate() {
-    if (this.state.pause) {
-      clearInterval(this.interval);
-      this.interval = setInterval(() => this.setState({ timeNow: Date.now() }), 1000);
-    } else {
-      if (this.state.convert) {
-        clearInterval(this.interval);
-        this.setState({ min: this.state.min - 1, sec: 59, convert: false });
-        this.interval = setInterval(
-          () => this.setState({ timeNow: Date.now(), sec: this.state.sec - 1, closetozero: false }),
-          1000
-        );
-      } else if ((this.state.min > 0) & (Number(this.state.sec) === 0)) {
-        clearInterval(this.interval);
-        this.interval = setInterval(
-          () => this.setState({ timeNow: Date.now(), sec: `0${this.state.sec}`, convert: true, closetozero: false }),
-          1000
-        );
-      } else if ((Number(this.state.sec) <= 10) & (Number(this.state.sec) > 0) & !this.state.closetozero) {
-        clearInterval(this.interval);
-        this.interval = setInterval(
-          () => this.setState({ timeNow: Date.now(), sec: `0${this.state.sec - 1}`, closetozero: true }),
-          1000
-        );
-      } else if ((Number(this.state.min) === 0) & (Number(this.state.sec) === 0)) {
-        this.setState({ pause: true });
-      }
-    }
-  }
-
-  componentWillUnmount() {
-    this.props.onUpdate(Number(this.state.min), Number(this.state.sec), this.state.ondelet);
-    clearInterval(this.interval);
-  }
-
-  render() {
-    const { label, onToggleDone, onDeleted, completed, time } = this.props;
-    const timerCreated = formatDistanceToNow(time, {
-      includeSeconds: true,
-      addSuffix: true,
-    });
-
-    const pauseTimer = () => {
-      this.setState({ pause: true });
-    };
-
-    const startTimer = () => {
-      if (this.state.pause) {
-        this.setState({ pause: false });
-        this.interval = setInterval(() => this.setState({ timeNow: Date.now(), sec: this.state.sec - 1 }), 1000);
-      }
-    };
-
-    const onCheck = () => {
-      if (!completed) {
-        pauseTimer();
-        onToggleDone();
-      } else {
-        startTimer();
-        onToggleDone();
-      }
-    };
-
-    const onDone = (event) => {
-      if (!completed) {
-        pauseTimer();
-        onToggleDone();
-        event.preventDefault();
-      } else {
-        startTimer();
-        event.preventDefault();
-        onToggleDone();
-      }
-    };
-
-    return (
-      <li className={classNames({ completed: completed })}>
-        <div className="view">
-          <input className="toggle" type="checkbox" checked={completed} onChange={onCheck}></input>
-          <label>
-            <div className="label">
-              <span className="description" onClick={onDone}>
-                {label}
-              </span>
-            </div>
-            <span className="timer">
-              <button className="icon icon-play" onClick={startTimer}></button>
-              <button className="icon icon-pause" onClick={pauseTimer}></button>
-              {this.state.min}:{this.state.sec}
+  return (
+    <li className={classNames({ completed: completed })}>
+      <div className="view">
+        <input className="toggle" type="checkbox" checked={completed} onChange={onCheck}></input>
+        <label>
+          <div className="label">
+            <span className="description" onClick={onDone}>
+              {label}
             </span>
-            <span className="created">created {timerCreated}</span>
-          </label>
-          <button className="icon icon-edit"></button>
-          <button className="icon icon-destroy" onClick={onDeleted}></button>
-        </div>
-      </li>
-    );
-  }
-}
+          </div>
+          <span className="timer">
+            <button className="icon icon-play" onClick={startTimer}></button>
+            <button className="icon icon-pause" onClick={pauseTimer}></button>
+            {timerSet()}
+          </span>
+          <span className="created">created {timerCreated}</span>
+        </label>
+        <button className="icon icon-edit"></button>
+        <button className="icon icon-destroy" onClick={onDeleted}></button>
+      </div>
+    </li>
+  );
+};
+
+export default Task;
 
 Task.defaultProps = {
   label: '',

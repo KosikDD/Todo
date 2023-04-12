@@ -2,35 +2,34 @@ import React from 'react';
 import propTypes from 'prop-types';
 
 import './TasksFilter.css';
-export default class TaskFilter extends React.Component {
-  buttons = [
+const TaskFilter = ({ filter, onFilter }) => {
+  const buttons = [
     { name: 'all', label: 'All' },
     { name: 'active', label: 'Active' },
     { name: 'completed', label: 'Completed' },
   ];
 
-  render() {
-    const buttons = this.buttons.map(({ name, label }) => {
-      const { filter, onFilter } = this.props;
-      const isActive = filter === name;
-      const clazz = isActive ? 'selected' : '';
-      return (
-        <li key={name}>
-          <button
-            className={clazz}
-            onClick={() => {
-              onFilter(name);
-            }}
-          >
-            {label}
-          </button>
-        </li>
-      );
-    });
+  const button = buttons.map(({ name, label }) => {
+    const isActive = filter === name;
+    const clazz = isActive ? 'selected' : '';
+    return (
+      <li key={name}>
+        <button
+          className={clazz}
+          onClick={() => {
+            onFilter(name);
+          }}
+        >
+          {label}
+        </button>
+      </li>
+    );
+  });
 
-    return <ul className="filters">{buttons}</ul>;
-  }
-}
+  return <ul className="filters">{button}</ul>;
+};
+
+export default TaskFilter;
 
 TaskFilter.defaultProps = {
   filter: 'all',
